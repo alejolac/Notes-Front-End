@@ -1,31 +1,51 @@
-import axios from 'axios'
-const baseUrl = 'https://backend-notes-mongodb-alejolac.onrender.com/api/notes'
+import axios from 'axios';
 
-const GetAll = () => {
-    const request = axios.get(baseUrl)
-    return request.then(response => response.data) 
-}
+const baseUrl = 'https://notes-mongo-db-ten.vercel.app/api/notes';
 
-const Create = newObject => {
-    const request = axios.post(baseUrl, newObject)
-    return request.then(response => response.data)
-}
+const GetAll = async () => {
+  try {
+    const response = await axios.get(baseUrl);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching notes:', error.message);
+    throw error;
+  }
+};
 
-const Update = (id, newObject) => {
-    const request = axios.put(`${baseUrl}/${id}`, newObject)
-    return request.then(response => response.data)
-    .catch(error => {
-        alert(error.message)
-    })
-}
+const Create = async (newObject) => {
+  try {
+    const response = await axios.post(baseUrl, newObject);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating note:', error.message);
+    throw error;
+  }
+};
 
-const Delete = id => {
-    if(id == "64480ef9733d623b9428bfbc") {
-        alert("You can't delete this note")
-        return
-    }
-    const request = axios.delete(`${baseUrl}/${id}`)
-    return request.then(response => response.data)
-}
+const Update = async (id, newObject) => {
+  try {
+    const response = await axios.put(`${baseUrl}/${id}`, newObject);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating note:', error.message);
+    alert('Error updating note: ' + error.message);
+    throw error;
+  }
+};
 
-export default { GetAll, Create, Update, Delete }
+const Delete = async (id) => {
+  if (id === '64480ef9733d623b9428bfbc') {
+    alert("You can't delete this note");
+    return;
+  }
+
+  try {
+    const response = await axios.delete(`${baseUrl}/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting note:', error.message);
+    throw error;
+  }
+};
+
+export default { GetAll, Create, Update, Delete };
